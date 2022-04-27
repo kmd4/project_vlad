@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template
 from data import db_session
 from data.users import User
-from data.news import News
+from data.messages import News
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user
 from mail import send_email
