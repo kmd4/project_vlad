@@ -30,6 +30,11 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
+        s = check_password(form.password.data)
+        if s != True:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message=s)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
@@ -71,6 +76,11 @@ def index():
     news = db_sess.query(News).filter(News.is_private != True)
     return render_template("index.html", news=news)
 
+
+def check_password(pas):
+    if len(pas) < 8: return 'Пароль слишком короткий'
+    if pas.isdigit() or pas.isalpha(): return 'Пароль слишком простой. Надежный пароль содержит латинские буквы и цифры'
+    return True
 
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
