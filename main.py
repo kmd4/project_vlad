@@ -1,11 +1,15 @@
+from dotenv import load_dotenv
 from flask import Flask, redirect, render_template
 from data import db_session
 from data.users import User
 from data.news import News
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user
+from mail import send_email
+
 
 app = Flask(__name__)
+load_dotenv()
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -31,6 +35,7 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+        send_email('mdku2005@gmail.com')
         user = User(
             name=form.name.data,
             about=form.about.data,
@@ -56,7 +61,7 @@ def login():
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
-    print(3)
+
     return render_template('login.html', title='Авторизация', form=form)
 
 
