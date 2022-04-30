@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template
 from data import db_session
 from data.users import User
-from data.messages import News
+from data.messages import Messages
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user
 from mail import send_email
@@ -73,7 +73,7 @@ def login():
 @app.route('/blog', methods=['GET', 'POST'])
 def index():
     db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private != True)
+    news = db_sess.query(Messages).filter(Messages.is_private != True)
     return render_template("index.html", news=news)
 
 
@@ -81,6 +81,7 @@ def check_password(pas):
     if len(pas) < 8: return 'Пароль слишком короткий'
     if pas.isdigit() or pas.isalpha(): return 'Пароль слишком простой. Надежный пароль содержит латинские буквы и цифры'
     return True
+
 
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
